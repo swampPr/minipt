@@ -1,40 +1,38 @@
-/*
-Copyright © 2026 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
+
+	"github.com/swampPr/minipt/internal/confirm"
 )
 
-// confirmCmd represents the confirm command
 var confirmCmd = &cobra.Command{
 	Use:   "confirm",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Confirm and view an image's information such as format, size, permissions and other information.",
+	RunE:  execConfirm,
+}
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("confirm called")
-	},
+func execConfirm(_ *cobra.Command, args []string) error {
+	if len(args) < 1 {
+		return fmt.Errorf("you must provide a path to the source image")
+	}
+
+	absPath, err := filepath.Abs(args[0])
+	if err != nil {
+		return fmt.Errorf("an error occurred: %v", err)
+	}
+
+	err = confirm.IMGInfo(absPath)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func init() {
 	rootCmd.AddCommand(confirmCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// confirmCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// confirmCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
