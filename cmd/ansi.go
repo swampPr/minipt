@@ -1,28 +1,37 @@
-/*
-Copyright © 2026 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
+
+	"github.com/swampPr/minipt/internal/ansi"
 )
 
-// ansiCmd represents the ansi command
 var ansiCmd = &cobra.Command{
 	Use:   "ansi",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Turn your image into cute ANSI art",
+	Example: `
+	minipt ansi [SOURCE IMAGE]
+	`,
+	RunE: execAnsi,
+}
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("ansi called")
-	},
+func execAnsi(cmd *cobra.Command, args []string) error {
+	if len(args) < 1 {
+		cmd.Help()
+		return fmt.Errorf("you must provide a path to the source image")
+	}
+
+	absPath, err := filepath.Abs(args[0])
+	if err != nil {
+		return fmt.Errorf("an error occurred: %v", err)
+	}
+
+	ansi.Build(absPath)
+
+	return nil
 }
 
 func init() {

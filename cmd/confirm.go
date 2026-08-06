@@ -12,11 +12,15 @@ import (
 var confirmCmd = &cobra.Command{
 	Use:   "confirm",
 	Short: "Confirm and view an image's information such as format, size, permissions and other information.",
-	RunE:  execConfirm,
+	Example: `
+	minipt confirm [SOURCE IMAGE]
+	`,
+	RunE: execConfirm,
 }
 
-func execConfirm(_ *cobra.Command, args []string) error {
+func execConfirm(cmd *cobra.Command, args []string) error {
 	if len(args) < 1 {
+		cmd.Help()
 		return fmt.Errorf("you must provide a path to the source image")
 	}
 
