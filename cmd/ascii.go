@@ -1,28 +1,40 @@
 /*
 Copyright © 2026 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
+
+	"github.com/swampPr/minipt/internal/ascii"
 )
 
 // asciiCmd represents the ascii command
 var asciiCmd = &cobra.Command{
 	Use:   "ascii",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Turn your image into some nice ASCII art.",
+	Example: `
+	minipt ascii [IMAGE SOURCE PATH]
+	`,
+	RunE: execASCII,
+}
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("ascii called")
-	},
+func execASCII(cmd *cobra.Command, args []string) error {
+	if len(args) < 1 {
+		_ = cmd.Help()
+		return fmt.Errorf("you must provide a path to the source image")
+	}
+
+	absPath, err := filepath.Abs(args[0])
+	if err != nil {
+		return fmt.Errorf("an error occurred: %v", err)
+	}
+	ascii.Build(absPath)
+
+	return nil
 }
 
 func init() {
