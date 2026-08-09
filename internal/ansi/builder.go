@@ -1,16 +1,20 @@
 // Package ansi provides ansi  INFO:  ANSI art business logic
 package ansi
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/swampPr/minipt/internal/utils"
+)
 
 // Build function  INFO:  Builds the ANSI art
 func Build(path string) error {
-	src, err := loadImage(path)
+	src, _, err := utils.LoadImage(path)
 	if err != nil {
 		return err
 	}
 
-	dst, err := resizeImage(src)
+	dst, err := utils.ResizeImage(src)
 	if err != nil {
 		return err
 	}

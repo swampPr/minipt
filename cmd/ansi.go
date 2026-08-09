@@ -20,7 +20,7 @@ var ansiCmd = &cobra.Command{
 
 func execAnsi(cmd *cobra.Command, args []string) error {
 	if len(args) < 1 {
-		cmd.Help()
+		_ = cmd.Help()
 		return fmt.Errorf("you must provide a path to the source image")
 	}
 
@@ -29,7 +29,10 @@ func execAnsi(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("an error occurred: %v", err)
 	}
 
-	ansi.Build(absPath)
+	err = ansi.Build(absPath)
+	if err != nil {
+		return fmt.Errorf("an error occurred trying to build the ANSI art: %w", err)
+	}
 
 	return nil
 }

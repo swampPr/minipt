@@ -3,6 +3,8 @@ package ascii
 
 import (
 	"fmt"
+
+	"github.com/swampPr/minipt/internal/utils"
 )
 
 const asciiChars = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/|()1{}[]?-_+~<>i!lI;:,\"^'\\`. "
@@ -26,12 +28,12 @@ func (pm pixMap) reduce(fn func(ac string, cur byte, idx int) string, initVal st
 
 // Build function  INFO:  Builds the actual ascii string
 func Build(path string) error {
-	src, err := loadImage(path)
+	src, _, err := utils.LoadImage(path)
 	if err != nil {
 		return err
 	}
 
-	img, err := resizeImage(src)
+	img, err := utils.ResizeImage(src)
 	if err != nil {
 		return err
 	}

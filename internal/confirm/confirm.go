@@ -3,10 +3,10 @@ package confirm
 
 import (
 	"fmt"
-	"image"
 	"os"
 
 	"github.com/swampPr/minipt/internal/logger"
+	"github.com/swampPr/minipt/internal/utils"
 )
 
 // IMGInfo function  INFO:  Confirms and outputs image information
@@ -18,14 +18,9 @@ func IMGInfo(path string) error {
 		return fmt.Errorf("an error occurred: %v", err)
 	}
 
-	f, err := os.Open(path) //#nosec
+	_, format, err := utils.LoadImage(path)
 	if err != nil {
-		return fmt.Errorf("an error occurred trying to open the file: %v", err)
-	}
-
-	_, format, err := image.Decode(f)
-	if err != nil {
-		return fmt.Errorf("an error occurred trying to decode the image: %v", err)
+		return fmt.Errorf("an error occurred trying to load the image: %v", err)
 	}
 
 	logging.Info("Actual Format: %s\n", format)

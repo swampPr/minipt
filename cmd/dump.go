@@ -45,7 +45,10 @@ func execDump(cmd *cobra.Command, args []string) error {
 		}
 
 		opts.OutFile = outFileAbs
-		dump.BMP(opts, srcFileAbs)
+		err = dump.BMP(opts, srcFileAbs)
+		if err != nil {
+			return fmt.Errorf("an error occurred trying to dump the bitmap: %w", err)
+		}
 
 		return nil
 	}
@@ -60,7 +63,10 @@ func execDump(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("an error occurred: %v", err)
 	}
 
-	dump.BMP(opts, srcFileAbs)
+	err = dump.BMP(opts, srcFileAbs)
+	if err != nil {
+		return fmt.Errorf("an error occurred trying to dump the bitmap: %w", err)
+	}
 
 	return nil
 }

@@ -1,4 +1,4 @@
-package ansi
+package utils
 
 import (
 	"image"
@@ -7,7 +7,8 @@ import (
 	"golang.org/x/term"
 )
 
-func resizeImage(src image.Image) (*image.RGBA, error) {
+// ResizeImage function  INFO:  Resizes a given image
+func ResizeImage(src image.Image) (*image.RGBA, error) {
 	bounds := src.Bounds()
 
 	srcHeight := bounds.Dy()

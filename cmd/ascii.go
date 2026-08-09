@@ -1,6 +1,3 @@
-/*
-Copyright © 2026 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -32,7 +29,10 @@ func execASCII(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return fmt.Errorf("an error occurred: %v", err)
 	}
-	ascii.Build(absPath)
+	err = ascii.Build(absPath)
+	if err != nil {
+		return fmt.Errorf("an error occurred trying to build the ascii art: %w", err)
+	}
 
 	return nil
 }

@@ -20,7 +20,7 @@ var confirmCmd = &cobra.Command{
 
 func execConfirm(cmd *cobra.Command, args []string) error {
 	if len(args) < 1 {
-		cmd.Help()
+		_ = cmd.Help()
 		return fmt.Errorf("you must provide a path to the source image")
 	}
 
