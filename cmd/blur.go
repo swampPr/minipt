@@ -13,18 +13,18 @@ var blurCmd = &cobra.Command{
 	Use:   "blur",
 	Short: "Blur your image and choose between gaussian or box blur",
 	Example: `
-	minipt blur [SOURCE IMAGE PATH]
-	minipt blur -p=4 [SOURCE IMAGE PATH]
-	minipt blur -g [SOURCE IMAGE PATH]
-	minipt blur -g -p=4 [SOURCE IMAGE PATH]
+	minipt blur [SOURCE IMAGE PATH] [OUTPUT PATH]
+	minipt blur -p=4 [SOURCE IMAGE PATH] [OUTPUT PATH]
+	minipt blur -g [SOURCE IMAGE PATH] [OUTPUT PATH]
+	minipt blur -g -p=4 [SOURCE IMAGE PATH] [OUTPUT PATH]
 	`,
 	RunE: execBlur,
 }
 
 func execBlur(cmd *cobra.Command, args []string) error {
-	if len(args) < 1 {
+	if len(args) < 2 {
 		_ = cmd.Help()
-		return fmt.Errorf("you must provide a path to the source image")
+		return fmt.Errorf("you must provide a path to the source image and an output path")
 	}
 
 	p, err := cmd.Flags().GetUint("passes")
@@ -37,7 +37,7 @@ func execBlur(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("you must provide at least 1 pass of blurring")
 	}
 
-	absPath, err := filepath.Abs(args[0])
+	absInPath, err := filepath.Abs(args[0])
 	if err != nil {
 		return fmt.Errorf("an error occurred: %w", err)
 	}
@@ -57,7 +57,7 @@ func execBlur(cmd *cobra.Command, args []string) error {
 		Passes:   p,
 	}
 
-	err = blur.Apply(absPath, opts, absOutPath)
+	err = blur.Apply(absInPath, opts, absOutPath)
 	if err != nil {
 		return fmt.Errorf("an error occurred trying to blur the image: %w", err)
 	}

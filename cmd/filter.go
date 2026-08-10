@@ -2,35 +2,66 @@ package cmd
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
+
+	"github.com/swampPr/minipt/internal/filter"
 )
 
-// filterCmd represents the filter command
 var filterCmd = &cobra.Command{
 	Use:   "filter",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Set a filter on your image",
+	RunE:  execFilter,
+}
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("filter called")
-	},
+var filterName string
+
+var gray bool
+
+func execFilter(cmd *cobra.Command, args []string) error {
+	if len(args) < 2 {
+		_ = cmd.Help()
+		fmt.Println(len(args))
+		fmt.Println(args)
+		return fmt.Errorf("please provide a path to the image and an output path")
+	}
+
+	inAbsPath, err := filepath.Abs(args[0])
+	if err != nil {
+		return fmt.Errorf("an error occurred: %s", err)
+	}
+
+	outAbsPath, err := filepath.Abs(args[1])
+	if err != nil {
+		return fmt.Errorf("an error occurred: %s", err)
+	}
+
+	switch {
+	case gray:
+		filterFn, ok := filter.Registry["grayscale"]
+		if !ok {
+			_ = cmd.Help()
+			return fmt.Errorf("unknown filter: %s", filterName)
+		}
+
+		opts := filter.Opts{
+			OutPath: outAbsPath,
+		}
+
+		err = filterFn(inAbsPath, &opts)
+		if err != nil {
+			return fmt.Errorf("an error occurred trying to set the filter: %w", err)
+		}
+	}
+	return nil
 }
 
 func init() {
 	rootCmd.AddCommand(filterCmd)
 
-	// Here you will define your flags and configuration settings.
+	filterCmd.Flags().BoolVarP(&gray, "gray", "g", false, "Grayscale filter toggle.")
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// filterCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// filterCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	filterCmd.MarkFlagsOneRequired("gray")
+	filterCmd.MarkFlagsMutuallyExclusive("gray")
 }
