@@ -2,35 +2,60 @@ package cmd
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
+	"github.com/swampPr/minipt/internal/flip"
 )
 
-// flipCmd represents the flip command
 var flipCmd = &cobra.Command{
 	Use:   "flip",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Flip an image horizontally or vertically",
+	RunE:  execFlip,
+}
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("flip called")
-	},
+var (
+	horizontal bool
+	vertical   bool
+)
+
+func execFlip(_ *cobra.Command, args []string) error {
+	if len(args) < 2 {
+		return fmt.Errorf("please input a source path and output path")
+	}
+
+	absInPath, err := filepath.Abs(args[0])
+	if err != nil {
+		return err
+	}
+
+	absOutPath, err := filepath.Abs(args[1])
+	if err != nil {
+		return err
+	}
+
+	if horizontal {
+		err = flip.Horizontal(absInPath, absOutPath)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	err = flip.Vertical(absInPath, absOutPath)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func init() {
 	rootCmd.AddCommand(flipCmd)
 
-	// Here you will define your flags and configuration settings.
+	flipCmd.Flags().BoolVarP(&horizontal, "horizontal", "x", false, "Whether to flip an image horizontally")
+	flipCmd.Flags().BoolVarP(&vertical, "vertical", "y", false, "Whether to flip an image vertically")
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// flipCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// flipCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	flipCmd.MarkFlagsOneRequired("horizontal", "vertical")
+	flipCmd.MarkFlagsMutuallyExclusive("horizontal", "vertical")
 }

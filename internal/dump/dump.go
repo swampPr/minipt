@@ -11,8 +11,9 @@ import (
 	_ "image/jpeg" // "image/jpeg"  INFO: Register jpeg encoder
 	_ "image/png"
 
-	_ "golang.org/x/image/bmp" // "golang.org/x/image/bmp"  INFO:  Register BMP encoder
-	_ "golang.org/x/image/webp"
+	// "golang.org/x/image/bmp"  INFO:  Register BMP encoder
+	_ "github.com/deepteams/webp"
+	_ "golang.org/x/image/bmp"
 
 	"github.com/swampPr/minipt/internal/logger"
 )

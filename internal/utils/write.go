@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/deepteams/webp"
 	"golang.org/x/image/bmp"
 )
 
@@ -39,12 +40,25 @@ func WriteImage(dst image.Image, format string, name string, path string) error 
 			return fmt.Errorf("an error occurred while encoding the new image: %w", err)
 		}
 
+	case "jpg":
+		err := jpeg.Encode(f, dst, nil)
+		if err != nil {
+			return fmt.Errorf("an error occurred while encoding the new image: %w", err)
+		}
+
 	case "bmp":
 		err := bmp.Encode(f, dst)
 		if err != nil {
 			return fmt.Errorf("an error occurred while encoding the new image: %w", err)
 		}
+	case "webp":
+		err := webp.Encode(f, dst, nil)
+		if err != nil {
+			return fmt.Errorf("an error occurred while encoding the new image: %w", err)
+		}
 
+	default:
+		return fmt.Errorf("invalid format '%s'. please choose between png, jpeg and webp", format)
 	}
 
 	return nil

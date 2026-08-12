@@ -3,6 +3,7 @@ module github.com/swampPr/minipt
 go 1.26.4
 
 require (
+	github.com/deepteams/webp v1.2.7
 	github.com/fatih/color v1.19.0
 	github.com/spf13/cobra v1.10.2
 	golang.org/x/image v0.44.0

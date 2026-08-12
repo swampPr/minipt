@@ -137,17 +137,16 @@ func Apply(path string, o Opts, outPath string) error {
 		return fmt.Errorf("output file already exists. delete, rename or choose another output path")
 	}
 
-	if outFormat != "" {
-		newName = strings.TrimSuffix(filepath.Base(outPath), "."+outFormat)
-		err = utils.WriteImage(dst, outFormat, newName, filepath.Dir(outPath))
-		if err != nil {
-			return err
-		}
-		logging.Info("Successfully blurred image and placed it in: %s", outPath)
-
-		return nil
-
-	} else {
+	if outFormat == "" {
 		return fmt.Errorf("output path does not exist or is ambiguous e.g './output/file' ")
 	}
+
+	newName = strings.TrimSuffix(filepath.Base(outPath), "."+outFormat)
+	err = utils.WriteImage(dst, outFormat, newName, filepath.Dir(outPath))
+	if err != nil {
+		return err
+	}
+	logging.Info("Successfully blurred image and placed it in: %s", outPath)
+
+	return nil
 }

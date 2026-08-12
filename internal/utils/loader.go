@@ -3,7 +3,14 @@ package utils
 
 import (
 	"image"
+	// image/jpeg  INFO:  Set jpeg and png decoder
+	_ "image/jpeg"
+	_ "image/png"
 	"os"
+
+	// "github.com/deepteams/webp"  INFO:  set webp and bmp decoder
+	_ "github.com/deepteams/webp"
+	_ "golang.org/x/image/bmp"
 )
 
 // LoadImage function  INFO:  Loads the image and returns an image.Image object

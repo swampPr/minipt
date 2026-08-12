@@ -17,7 +17,7 @@ var filterCmd = &cobra.Command{
 
 var filterName string
 
-var gray bool
+var gray, invert bool
 
 func execFilter(cmd *cobra.Command, args []string) error {
 	if len(args) < 2 {
@@ -53,6 +53,21 @@ func execFilter(cmd *cobra.Command, args []string) error {
 		if err != nil {
 			return fmt.Errorf("an error occurred trying to set the filter: %w", err)
 		}
+	case invert:
+		filterFn, ok := filter.Registry["invert"]
+		if !ok {
+			_ = cmd.Help()
+			return fmt.Errorf("unknown filter: %s", filterName)
+		}
+
+		opts := filter.Opts{
+			OutPath: outAbsPath,
+		}
+
+		err = filterFn(inAbsPath, &opts)
+		if err != nil {
+			return fmt.Errorf("an error occurred trying to set the filter: %w", err)
+		}
 	}
 	return nil
 }
@@ -61,7 +76,8 @@ func init() {
 	rootCmd.AddCommand(filterCmd)
 
 	filterCmd.Flags().BoolVarP(&gray, "gray", "g", false, "Grayscale filter toggle.")
+	filterCmd.Flags().BoolVarP(&invert, "invert", "i", false, "Invert colors filter toggle.")
 
-	filterCmd.MarkFlagsOneRequired("gray")
-	filterCmd.MarkFlagsMutuallyExclusive("gray")
+	filterCmd.MarkFlagsOneRequired("gray", "invert")
+	filterCmd.MarkFlagsMutuallyExclusive("gray", "invert")
 }

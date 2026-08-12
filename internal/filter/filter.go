@@ -12,4 +12,5 @@ type Func func(path string, fo *Opts) error
 // Registry  INFO:  Registry for available filters and their function references
 var Registry = map[string]Func{
 	"grayscale": Grayscale,
+	"invert":    Invert,
 }

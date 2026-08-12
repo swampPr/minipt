@@ -12,7 +12,7 @@ import (
 	"github.com/swampPr/minipt/internal/utils"
 )
 
-func apply(src image.Image, x, y int) color.RGBA {
+func applyGrayscale(src image.Image, x, y int) color.RGBA {
 	r, g, b, a := src.At(x, y).RGBA()
 
 	r8, g8, b8, a8 := byte(r>>8), byte(g>>8), byte(b>>8), byte(a>>8) //#nosec
@@ -53,7 +53,7 @@ func Grayscale(inPath string, o *Opts) error {
 
 	for y := src.Bounds().Min.Y; y < src.Bounds().Max.Y; y++ {
 		for x := src.Bounds().Min.X; x < src.Bounds().Max.X; x++ {
-			dst.Set(x, y, apply(src, x, y))
+			dst.Set(x, y, applyGrayscale(src, x, y))
 		}
 	}
 
@@ -73,16 +73,15 @@ func Grayscale(inPath string, o *Opts) error {
 		return fmt.Errorf("the output file may already exist. delete, rename or choose another out path")
 	}
 
-	if outFormat != "" {
-		newName := strings.TrimSuffix(filepath.Base(o.OutPath), "."+outFormat)
-		err = utils.WriteImage(dst, outFormat, newName, filepath.Dir(o.OutPath))
-		if err != nil {
-			return err
-		}
-		logging.Info("Image has been successfully written to: %s", o.OutPath)
-	} else {
+	if outFormat == "" {
 		return fmt.Errorf("output path does not exist or is ambiguous e.g './output/file' ")
 	}
 
+	newName := strings.TrimSuffix(filepath.Base(o.OutPath), "."+outFormat)
+	err = utils.WriteImage(dst, outFormat, newName, filepath.Dir(o.OutPath))
+	if err != nil {
+		return err
+	}
+	logging.Info("Image has been successfully written to: %s", o.OutPath)
 	return nil
 }
