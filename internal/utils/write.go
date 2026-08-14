@@ -58,7 +58,7 @@ func WriteImage(dst image.Image, format string, name string, path string) error 
 		}
 
 	default:
-		return fmt.Errorf("invalid format '%s'. please choose between png, jpeg and webp", format)
+		return fmt.Errorf("invalid format '%s'. please choose between png, jpeg webp and bmp", format)
 	}
 
 	return nil

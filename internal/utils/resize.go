@@ -7,8 +7,8 @@ import (
 	"golang.org/x/term"
 )
 
-// ResizeImage function  INFO:  Resizes a given image
-func ResizeImage(src image.Image) (*image.RGBA, error) {
+// ResizeToTerm function  INFO:  Resizes a given image to the terminal output
+func ResizeToTerm(src image.Image) (*image.RGBA, error) {
 	bounds := src.Bounds()
 
 	srcHeight := bounds.Dy()

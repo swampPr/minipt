@@ -13,7 +13,7 @@ var SupportedFormats = []string{"bmp", "webp", "png", "jpeg", "jpg"}
 // Func  INFO:  Signature for a function that converts from one format to another
 type Func = func(inPath string, outPath string, o Opts) error
 
-// Registry  INFO: Registry of allowed formats to convert to
+// Registry  INFO: Registry of allowed formats to convert to and their functions
 var Registry = map[string]Func{
 	"jpeg": Jpeg,
 	"jpg":  Jpeg,

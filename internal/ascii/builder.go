@@ -33,15 +33,15 @@ func Build(path string) error {
 		return err
 	}
 
-	img, err := utils.ResizeImage(src)
+	img, err := utils.ResizeToTerm(src)
 	if err != nil {
 		return err
 	}
 
 	rgb := make([]byte, 0, img.Bounds().Dx()*img.Bounds().Dy())
 
-	for y := range img.Bounds().Dy() {
-		for x := range img.Bounds().Dx() {
+	for y := img.Bounds().Min.Y; y < img.Bounds().Max.Y; y++ {
+		for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
 			r, g, b, _ := img.At(x, y).RGBA()
 
 			rgb = append(rgb, byte(r>>8), byte(g>>8), byte(b>>8)) //#nosec

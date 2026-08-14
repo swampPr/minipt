@@ -14,7 +14,7 @@ func Build(path string) error {
 		return err
 	}
 
-	dst, err := utils.ResizeImage(src)
+	dst, err := utils.ResizeToTerm(src)
 	if err != nil {
 		return err
 	}
