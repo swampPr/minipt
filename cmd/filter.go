@@ -12,7 +12,11 @@ import (
 var filterCmd = &cobra.Command{
 	Use:   "filter",
 	Short: "Set a filter on your image",
-	RunE:  execFilter,
+	Example: `
+	minipt filter --gray ./in.png ./out.png
+	minipt filter --invert ./in.png ./out.png
+	`,
+	RunE: execFilter,
 }
 
 var filterName string

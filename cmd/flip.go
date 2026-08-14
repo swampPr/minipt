@@ -9,7 +9,11 @@ import (
 )
 
 var flipCmd = &cobra.Command{
-	Use:   "flip",
+	Use: "flip",
+	Example: `
+	minipt flip --horizontal ./in.png ./out.png
+	minipt flip --vertical ./in.png ./out.png
+	`,
 	Short: "Flip an image horizontally or vertically",
 	RunE:  execFlip,
 }

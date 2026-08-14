@@ -14,7 +14,11 @@ import (
 var resizeCmd = &cobra.Command{
 	Use:   "resize",
 	Short: "Resize an image to a given width or height.",
-	RunE:  execResize,
+	Example: `
+	minipt resize --bilinear --width 160 --height 160 ./in.png ./out.png
+	minipt resize --nearest --width 160 --height 160 ./in.png ./out.png
+	`,
+	RunE: execResize,
 }
 
 var (
