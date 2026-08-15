@@ -6,11 +6,14 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/swampPr/minipt/internal/logger"
 	"github.com/swampPr/minipt/internal/utils"
 )
 
 // Nearest function  INFO:  Resizes an iamge usisng the nearerst neighbor algorithm
 func Nearest(inPath, outPath string, width, height uint) error {
+	var logging logger.Logger
+
 	src, _, err := utils.LoadImage(inPath)
 	if err != nil {
 		return err
@@ -41,6 +44,8 @@ func Nearest(inPath, outPath string, width, height uint) error {
 	if err != nil {
 		return err
 	}
+
+	logging.Info("Successfully wrote image to: %s", outPath)
 
 	return nil
 }

@@ -6,11 +6,14 @@ import (
 
 	"github.com/deepteams/webp"
 
+	"github.com/swampPr/minipt/internal/logger"
 	"github.com/swampPr/minipt/internal/utils"
 )
 
 // WebP function  INFO:  Converts a given image to WebP
 func WebP(inPath string, outPath string, o Opts) error {
+	var logging logger.Logger
+
 	src, _, err := utils.LoadImage(inPath)
 	if err != nil {
 		return fmt.Errorf("there was an error loading the image: %w", err)
@@ -25,6 +28,8 @@ func WebP(inPath string, outPath string, o Opts) error {
 	if err != nil {
 		return fmt.Errorf("there was an error encoding the new image: %w", err)
 	}
+
+	logging.Info("Successfully wrote WEBP image into: %s", outPath)
 
 	return nil
 }

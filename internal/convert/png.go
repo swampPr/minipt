@@ -5,11 +5,14 @@ import (
 	"image/png"
 	"os"
 
+	"github.com/swampPr/minipt/internal/logger"
 	"github.com/swampPr/minipt/internal/utils"
 )
 
 // PNG function  INFO:  encodes the source image into a png image
 func PNG(inPath string, outPath string, _ Opts) error {
+	var logging logger.Logger
+
 	src, _, err := utils.LoadImage(inPath)
 	if err != nil {
 		return fmt.Errorf("there was an error loading the source image: %w", err)
@@ -26,6 +29,8 @@ func PNG(inPath string, outPath string, _ Opts) error {
 	if err != nil {
 		return fmt.Errorf("there was an error encoding the new image: %w", err)
 	}
+
+	logging.Info("Successfully wrote PNG image into: %s", outPath)
 
 	return nil
 }

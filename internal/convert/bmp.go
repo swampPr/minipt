@@ -6,11 +6,14 @@ import (
 
 	"golang.org/x/image/bmp"
 
+	"github.com/swampPr/minipt/internal/logger"
 	"github.com/swampPr/minipt/internal/utils"
 )
 
 // BMP function  INFO:  Encodes the source image as a bitmap
 func BMP(inPath string, outPath string, _ Opts) error {
+	var logging logger.Logger
+
 	src, _, err := utils.LoadImage(inPath)
 	if err != nil {
 		return fmt.Errorf("there was an error loading the source image: %w", err)
@@ -27,6 +30,8 @@ func BMP(inPath string, outPath string, _ Opts) error {
 	if err != nil {
 		return fmt.Errorf("there was an error encoding the new image: %w", err)
 	}
+
+	logging.Info("Successfully wrote BMP image into: %s", outPath)
 
 	return nil
 }

@@ -67,5 +67,7 @@ func Horizontal(inPath string, outPath string) error {
 		return fmt.Errorf("there was an error writing the new image: %w", err)
 	}
 
+	logging.Info("Successfully wrote image to: %s", outPath)
+
 	return nil
 }

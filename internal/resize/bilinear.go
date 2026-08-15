@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/swampPr/minipt/internal/logger"
 	"github.com/swampPr/minipt/internal/utils"
 )
 
@@ -57,6 +58,8 @@ func getFinalColor(src image.Image, dstBounds image.Rectangle, x, y int) color.R
 
 // Bilinear function  INFO:  Uses bilinear interpolation to resize an image
 func Bilinear(inPath string, outPath string, width uint, height uint) error {
+	var logging logger.Logger
+
 	src, _, err := utils.LoadImage(inPath)
 	if err != nil {
 		return err
@@ -81,6 +84,8 @@ func Bilinear(inPath string, outPath string, width uint, height uint) error {
 	if err != nil {
 		return err
 	}
+
+	logging.Info("Successfully wrote image to: %s", outPath)
 
 	return nil
 }

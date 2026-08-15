@@ -82,6 +82,6 @@ func Grayscale(inPath string, o *Opts) error {
 	if err != nil {
 		return err
 	}
-	logging.Info("Image has been successfully written to: %s", o.OutPath)
+	logging.Info("Successfully wrote image into: %s", o.OutPath)
 	return nil
 }
