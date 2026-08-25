@@ -17,20 +17,26 @@ func getFinalColor(src image.Image, dstBounds image.Rectangle, x, y int) color.R
 	srcWidth := src.Bounds().Dx()
 	srcHeight := src.Bounds().Dy()
 
-	scaleX := float64(srcWidth) / float64(dstBounds.Dx())
-	scaleY := float64(srcHeight) / float64(dstBounds.Dx())
+	scaleX := float64(srcWidth-1) / float64(dstBounds.Dx()-1)
+	scaleY := float64(srcHeight-1) / float64(dstBounds.Dy()-1)
 
 	sourceX := float64(x) * scaleX
 	sourceY := float64(y) * scaleY
 
-	dx := sourceX - math.Floor(sourceX)
-	dy := sourceY - math.Floor(sourceY)
+	x0 := int(math.Floor(sourceX))
+	x1 := min(x0+1, srcWidth-1)
 
-	tlR, tlG, tlB, tlA := src.At(int(math.Floor(sourceX)), int(math.Floor(sourceY))).RGBA()
-	trR, trG, trB, trA := src.At(int(math.Ceil(sourceX)), int(math.Floor(sourceY))).RGBA()
+	y0 := int(math.Floor(sourceY))
+	y1 := min(y0+1, srcHeight-1)
 
-	blR, blG, blB, blA := src.At(int(math.Floor(sourceX)), int(math.Ceil(sourceY))).RGBA()
-	brR, brG, brB, brA := src.At(int(math.Ceil(sourceX)), int(math.Ceil(sourceY))).RGBA()
+	dx := sourceX - float64(x0)
+	dy := sourceY - float64(y0)
+
+	tlR, tlG, tlB, tlA := src.At(x0, y0).RGBA()
+	trR, trG, trB, trA := src.At(x1, y0).RGBA()
+
+	blR, blG, blB, blA := src.At(x0, y1).RGBA()
+	brR, brG, brB, brA := src.At(x1, y1).RGBA()
 
 	topR := (float64(tlR) * (1 - dx)) + (float64(trR) * dx)
 	topG := (float64(tlG) * (1 - dx)) + (float64(trG) * dx)

@@ -12,7 +12,7 @@ import (
 	"golang.org/x/image/bmp"
 )
 
-// WriteImage function  INFO:  Writes the image out to the path provides
+// WriteImage function  INFO:  Writes the image out to the path provided
 func WriteImage(dst image.Image, format string, name string, path string) error {
 	fileName := fmt.Sprintf("%s.%s", name, format)
 
