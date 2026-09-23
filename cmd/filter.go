@@ -15,13 +15,12 @@ var filterCmd = &cobra.Command{
 	Example: `
 	minipt filter --gray ./in.png ./out.png
 	minipt filter --invert ./in.png ./out.png
+	minipt filter --sepia ./in.png ./out.png
 	`,
 	RunE: execFilter,
 }
 
-var filterName string
-
-var gray, invert bool
+var gray, invert, sepia bool
 
 func execFilter(cmd *cobra.Command, args []string) error {
 	if len(args) < 2 {
@@ -46,7 +45,7 @@ func execFilter(cmd *cobra.Command, args []string) error {
 		filterFn, ok := filter.Registry["grayscale"]
 		if !ok {
 			_ = cmd.Help()
-			return fmt.Errorf("unknown filter: %s", filterName)
+			return fmt.Errorf("unknown filter")
 		}
 
 		opts := filter.Opts{
@@ -61,9 +60,23 @@ func execFilter(cmd *cobra.Command, args []string) error {
 		filterFn, ok := filter.Registry["invert"]
 		if !ok {
 			_ = cmd.Help()
-			return fmt.Errorf("unknown filter: %s", filterName)
+			return fmt.Errorf("unknown filter")
 		}
 
+		opts := filter.Opts{
+			OutPath: outAbsPath,
+		}
+
+		err = filterFn(inAbsPath, &opts)
+		if err != nil {
+			return fmt.Errorf("an error occurred trying to set the filter: %w", err)
+		}
+	case sepia:
+		filterFn, ok := filter.Registry["sepia"]
+		if !ok {
+			_ = cmd.Help()
+			return fmt.Errorf("unknown filter")
+		}
 		opts := filter.Opts{
 			OutPath: outAbsPath,
 		}
@@ -81,7 +94,8 @@ func init() {
 
 	filterCmd.Flags().BoolVarP(&gray, "gray", "g", false, "Grayscale filter toggle.")
 	filterCmd.Flags().BoolVarP(&invert, "invert", "i", false, "Invert colors filter toggle.")
+	filterCmd.Flags().BoolVarP(&sepia, "sepia", "s", false, "Sepia filter toggle.")
 
-	filterCmd.MarkFlagsOneRequired("gray", "invert")
-	filterCmd.MarkFlagsMutuallyExclusive("gray", "invert")
+	filterCmd.MarkFlagsOneRequired("gray", "invert", "sepia")
+	filterCmd.MarkFlagsMutuallyExclusive("gray", "invert", "sepia")
 }

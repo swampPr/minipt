@@ -13,4 +13,5 @@ type Func func(path string, fo *Opts) error
 var Registry = map[string]Func{
 	"grayscale": Grayscale,
 	"invert":    Invert,
+	"sepia":     SepiaImage,
 }
