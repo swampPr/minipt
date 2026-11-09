@@ -25,8 +25,6 @@ var gray, invert, sepia bool
 func execFilter(cmd *cobra.Command, args []string) error {
 	if len(args) < 2 {
 		_ = cmd.Help()
-		fmt.Println(len(args))
-		fmt.Println(args)
 		return fmt.Errorf("please provide a path to the image and an output path")
 	}
 
